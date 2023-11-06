@@ -15,6 +15,8 @@ public class HandInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // input of button
+        float input = inputActions.action.ReadValue<float>();
+        Debug.Log(input);
     }
 }
