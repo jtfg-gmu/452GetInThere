@@ -1065,6 +1065,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Soldier
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
+      propertyPath: m_TagString
+      value: soilder
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
