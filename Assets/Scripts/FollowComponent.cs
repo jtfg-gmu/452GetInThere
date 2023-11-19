@@ -5,28 +5,24 @@ using UnityEngine.AI;
 
 public class FollowComponent : MonoBehaviour
 {
-    public NavMeshAgent navMesh;
-    public int Follow_Distance;
-    private bool is_moving; 
-
-    public bool isMoving()
-    {
-        return navMesh.remainingDistance <= navMesh.stoppingDistance;
-    }
+    private NavMeshAgent agent;
+    private GameObject dest;
+    
 
     // Start is called before the first frame update
     void Start()
     {
-        navMesh = this.GetComponent<NavMeshAgent>();
-	is_moving = false;
+	    dest = GameObject.FindGameObjectWithTag("castle");
+	    agent = GetComponent<NavMeshAgent>();
+	    agent.SetDestination(dest.transform.position);
     }
 
     // Update is called once per frame
     void Update()
     {
-        double distance = Vector3.Distance(this.gameObject.transform.position, Main.instance.castle.position);
-	if(distance <= Follow_Distance)
-	    navMesh.SetDestination(Main.instance.transform.position);
-	is_moving = isMoving();
+ //        double distance = Vector3.Distance(this.gameObject.transform.position, Main.instance.castle.position);
+	// if(distance <= Follow_Distance)
+	//     navMesh.SetDestination(Main.instance.transform.position);
+	// is_moving = isMoving();
     }
 }

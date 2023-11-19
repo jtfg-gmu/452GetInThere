@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Anchor
   - soldier
+  - castle
   layers:
   - Default
   - TransparentFX
