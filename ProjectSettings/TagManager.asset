@@ -3,7 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
+<<<<<<< HEAD
   tags: []
+=======
+  tags:
+  - castle
+  - Anchor
+  - door
+  - soldier
+>>>>>>> 7ce3dcdc6bec86b475f50de881d1550fec4f617b
   layers:
   - Default
   - TransparentFX

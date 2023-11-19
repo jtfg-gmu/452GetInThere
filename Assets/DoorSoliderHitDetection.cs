@@ -1,11 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class minionHitDection : MonoBehaviour
+public class DoorSoliderHitDetection : MonoBehaviour
 {
     // Start is called before the first frame update
+    public int health = 50;
     void Start()
     {
         
@@ -19,10 +17,11 @@ public class minionHitDection : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log(other.collider);
-        if (other.collider.material.name.Equals("door"))
+        if (other.gameObject.CompareTag("soldier"))
         {
-            Debug.Log("collide with door");
+            Debug.Log("door");
+            health -= 10;
+            Debug.Log(health);
         }
     }
 }
