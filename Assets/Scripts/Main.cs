@@ -18,8 +18,8 @@ public class Main : MonoBehaviour
 	void Start()
 	{
 
-		GameObject.Instantiate(Resources.Load<GameObject>("Castle"), castle.position, castle.rotation);
-		InvokeRepeating("InstantiateEntities", 5f, 5f);
+		InstantiateEntities();
+		StartCoroutine(SpawnTroop());
 	}
 
 	// Update is called once per frame
@@ -30,6 +30,16 @@ public class Main : MonoBehaviour
 
 	private void InstantiateEntities()
 	{
+		GameObject.Instantiate(Resources.Load<GameObject>("Castle"), castle.position, castle.rotation);
 		GameObject.Instantiate(Resources.Load<GameObject>("Soldier"), Soldier_Spawn.position, Soldier_Spawn.rotation);
+	}
+
+	IEnumerator SpawnTroop()
+	{
+	    while(true)
+	    {
+		GameObject.Instantiate(Resources.Load<GameObject>("Soldier"), Soldier_Spawn.position, Soldier_Spawn.rotation);
+		yield return new WaitForSeconds(5f);
+	    }
 	}
 }

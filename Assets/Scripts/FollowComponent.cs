@@ -8,6 +8,7 @@ public class FollowComponent : MonoBehaviour
     public NavMeshAgent navMesh;
     public int Follow_Distance;
     private bool is_moving; 
+    private Animator my_animator;
 
     public bool isMoving()
     {
@@ -18,6 +19,7 @@ public class FollowComponent : MonoBehaviour
     void Start()
     {
         navMesh = this.GetComponent<NavMeshAgent>();
+	my_animator = this.GetComponent<Animator>();
 	is_moving = false;
     }
 
@@ -30,5 +32,6 @@ public class FollowComponent : MonoBehaviour
 	else
 	    //go to the player.
 	is_moving = isMoving();
+	my_animator.SetBool("is_moving", is_moving);
     }
 }
