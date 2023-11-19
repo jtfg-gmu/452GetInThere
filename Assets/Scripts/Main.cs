@@ -6,6 +6,8 @@ public class Main : MonoBehaviour
 {
     public static Main instance;
     public Transform castle;
+    public Transform Soldier_Spawn;
+    public int Number_of_allied_soldiers;
 
     void Awake()
     {
@@ -15,12 +17,19 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+	InstantiateEntities();        
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void InstantiateEntities()
+    {
+	GameObject.Instantiate(Resources.Load<GameObject>("Castle"), castle.position, castle.rotation);
+	for(int cnt = 0; cnt < Number_of_allied_soldiers; cnt++)
+		GameObject.Instantiate(Resources.Load<GameObject>("Soldier"), Soldier_Spawn.position, Soldier_Spawn.rotation);
     }
 }
