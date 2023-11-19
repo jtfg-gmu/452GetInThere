@@ -5,9 +5,10 @@ using UnityEngine;
 public class Main : MonoBehaviour
 {
 	public static Main instance;
-	public Transform castle;
+	public Transform[] castles;
 	public Transform Soldier_Spawn;
 	public int Number_of_allied_soldiers;
+	private int soldierCtr;
 
 	void Awake()
 	{
@@ -17,29 +18,34 @@ public class Main : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-
-		InstantiateEntities();
-		StartCoroutine(SpawnTroop());
+		soldierCtr = 0;
+		SpawnCastles();
+		InvokeRepeating("SpawnSoilders", 1f, 3f);
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-
+		
 	}
 
-	private void InstantiateEntities()
+	private void SpawnSoilders()
 	{
-		GameObject.Instantiate(Resources.Load<GameObject>("Castle"), castle.position, castle.rotation);
-		GameObject.Instantiate(Resources.Load<GameObject>("Soldier"), Soldier_Spawn.position, Soldier_Spawn.rotation);
+		if (soldierCtr <= Number_of_allied_soldiers)
+		{
+			GameObject.Instantiate(Resources.Load<GameObject>("Soldier"), Soldier_Spawn.position, Soldier_Spawn.rotation);
+			soldierCtr += 1;
+		}
+		
 	}
 
-	IEnumerator SpawnTroop()
+	private void SpawnCastles()
 	{
-	    while(true)
-	    {
-		GameObject.Instantiate(Resources.Load<GameObject>("Soldier"), Soldier_Spawn.position, Soldier_Spawn.rotation);
-		yield return new WaitForSeconds(5f);
-	    }
+		for (var i = 0; i < castles.Length; i++)
+		{
+			GameObject.Instantiate(Resources.Load<GameObject>("Castle"), castles[i].position, castles[i].rotation);
+		}
+		
+		
 	}
 }
