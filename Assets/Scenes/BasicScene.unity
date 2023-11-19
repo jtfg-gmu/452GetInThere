@@ -1449,6 +1449,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ade8338cd34945b4db488c86092a226d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  navMesh: {fileID: 0}
+  Follow_Distance: 0
 --- !u!95 &1110367856
 Animator:
   serializedVersion: 5
@@ -1862,7 +1864,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a83fbd031dbde3a46a121fd9fb9a8431, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< Updated upstream
   castles:
+=======
+  castleLocations:
+>>>>>>> Stashed changes
   - {fileID: 1336330265}
   Soldier_Spawn: {fileID: 767299903}
   Number_of_allied_soldiers: 10
@@ -2111,7 +2117,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859b8a52bf4f64b41bbf6ba3642a8458, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soldier: {fileID: 0}
 --- !u!114 &2024102335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2124,7 +2129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859b8a52bf4f64b41bbf6ba3642a8458, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soldier: {fileID: 0}
 --- !u!1 &2036711632
 GameObject:
   m_ObjectHideFlags: 0
