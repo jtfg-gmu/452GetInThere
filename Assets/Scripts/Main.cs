@@ -17,6 +17,8 @@ public class Main : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
+
+		GameObject.Instantiate(Resources.Load<GameObject>("Castle"), castle.position, castle.rotation);
 		InvokeRepeating("InstantiateEntities", 5f, 5f);
 	}
 
@@ -28,7 +30,6 @@ public class Main : MonoBehaviour
 
 	private void InstantiateEntities()
 	{
-		GameObject.Instantiate(Resources.Load<GameObject>("Castle"), castle.position, castle.rotation);
 		GameObject.Instantiate(Resources.Load<GameObject>("Soldier"), Soldier_Spawn.position, Soldier_Spawn.rotation);
 	}
 }

@@ -27,6 +27,8 @@ public class FollowComponent : MonoBehaviour
         double distance = Vector3.Distance(this.gameObject.transform.position, Main.instance.castle.position);
 	if(distance <= Follow_Distance)
 	    navMesh.SetDestination(Main.instance.transform.position);
+	else
+	    //go to the player.
 	is_moving = isMoving();
     }
 }
