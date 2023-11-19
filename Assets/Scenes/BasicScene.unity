@@ -1227,6 +1227,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6353664723299202858, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
       insertIndex: 1
       addedObject: {fileID: 2024102331}
+    - targetCorrespondingSourceObject: {fileID: 6353664723299202858, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2024102335}
+    - targetCorrespondingSourceObject: {fileID: 6353664723299202858, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2024102334}
   m_SourcePrefab: {fileID: 100100000, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
 --- !u!1 &1110367849 stripped
 GameObject:
@@ -1481,7 +1487,7 @@ GameObject:
   - component: {fileID: 1249617924}
   m_Layer: 0
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1753,7 +1759,7 @@ GameObject:
   - component: {fileID: 1336330265}
   m_Layer: 0
   m_Name: Castle spawn
-  m_TagString: soldier
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2091,6 +2097,32 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 5259749294505693037, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
+--- !u!114 &2024102334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2024102326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 859b8a52bf4f64b41bbf6ba3642a8458, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soldier: {fileID: 0}
+--- !u!114 &2024102335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2024102326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 859b8a52bf4f64b41bbf6ba3642a8458, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soldier: {fileID: 0}
 --- !u!1 &2036711632
 GameObject:
   m_ObjectHideFlags: 0

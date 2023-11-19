@@ -38,4 +38,12 @@ public class FollowComponent : MonoBehaviour
 		    gameObject.GetComponent<Animator>().SetBool("is_moving", false);
 	    }
     }
+
+    private void OnCollisionEnter(Collision other)
+    {
+	    if (other.gameObject.CompareTag("floor"))
+	    {
+		    gameObject.transform.position = new Vector3(gameObject.transform.position.x, 0, gameObject.transform.position.z);
+	    }
+    }
 }
