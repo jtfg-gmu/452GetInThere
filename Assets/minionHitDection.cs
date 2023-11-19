@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class minionHitDection : MonoBehaviour
 {
@@ -18,11 +20,30 @@ public class minionHitDection : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision other)
+
     {
-        Debug.Log(other.collider);
-        if (other.collider.material.name.Equals("door"))
+
+        if (other.gameObject.CompareTag("door"))
         {
-            Debug.Log("collide with door");
+            Debug.Log("door");
+            // foreach (ContactPoint contactPoint in other.contacts)
+            // {
+            //     GameObject collideObj = other.gameObject;
+            //     Renderer renderder = collideObj.GetComponent<Renderer>();
+            //     List<Material> materials = renderder.materials.ToList();
+            //     foreach (Material t in materials)
+            //     {
+            //         Debug.Log(t.name);
+            //     }
+            //     
+            // }
+            
+            
         }
+        else if (other.gameObject.CompareTag("castle"))
+        {
+            Debug.Log("castle");
+        }
+        
     }
 }
