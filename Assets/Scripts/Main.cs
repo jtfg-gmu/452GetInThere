@@ -4,32 +4,31 @@ using UnityEngine;
 
 public class Main : MonoBehaviour
 {
-    public static Main instance;
-    public Transform castle;
-    public Transform Soldier_Spawn;
-    public int Number_of_allied_soldiers;
+	public static Main instance;
+	public Transform castle;
+	public Transform Soldier_Spawn;
+	public int Number_of_allied_soldiers;
 
-    void Awake()
-    {
-	Main.instance = this;
-    }
+	void Awake()
+	{
+		Main.instance = this;
+	}
 
-    // Start is called before the first frame update
-    void Start()
-    {
-	InstantiateEntities();        
-    }
+	// Start is called before the first frame update
+	void Start()
+	{
+		InvokeRepeating("InstantiateEntities", 5f, 5f);
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	// Update is called once per frame
+	void Update()
+	{
 
-    private void InstantiateEntities()
-    {
-	GameObject.Instantiate(Resources.Load<GameObject>("Castle"), castle.position, castle.rotation);
-	for(int cnt = 0; cnt < Number_of_allied_soldiers; cnt++)
+	}
+
+	private void InstantiateEntities()
+	{
+		GameObject.Instantiate(Resources.Load<GameObject>("Castle"), castle.position, castle.rotation);
 		GameObject.Instantiate(Resources.Load<GameObject>("Soldier"), Soldier_Spawn.position, Soldier_Spawn.rotation);
-    }
+	}
 }
