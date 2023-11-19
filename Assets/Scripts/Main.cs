@@ -20,7 +20,8 @@ public class Main : MonoBehaviour
 	{
 		soldierCtr = 0;
 		SpawnCastles();
-		InvokeRepeating("SpawnSoilders", 1f, 3f);
+		
+		InvokeRepeating("SpawnSoldiers", 1f, 3f);
 	}
 
 	// Update is called once per frame
@@ -29,7 +30,7 @@ public class Main : MonoBehaviour
 		
 	}
 
-	private void SpawnSoilders()
+	private void SpawnSoldiers()
 	{
 		if (soldierCtr <= Number_of_allied_soldiers)
 		{
