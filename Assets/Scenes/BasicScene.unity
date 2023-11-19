@@ -1862,9 +1862,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a83fbd031dbde3a46a121fd9fb9a8431, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  castle: {fileID: 1336330265}
+  castles:
+  - {fileID: 1336330265}
   Soldier_Spawn: {fileID: 767299903}
   Number_of_allied_soldiers: 10
+  Number_of_Castles: 0
 --- !u!4 &1545893827
 Transform:
   m_ObjectHideFlags: 0

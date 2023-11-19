@@ -26,11 +26,21 @@ public class FollowComponent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        double distance = Vector3.Distance(this.gameObject.transform.position, Main.instance.castle.position);
-    	if(distance <= Follow_Distance)
-    	    navMesh.SetDestination(Main.instance.castle.transform.position);
-    	else
-    	    //go to the player.
+        double shortestDistance = 2000000;
+	Transform closestCastle = null;
+
+	for(var i = 0; i < Main.instance.castles.Length; i++)
+	{
+		double distance = Vector3.Distance(this.gameObject.transform.position, Main.instance.castles[i].transform.position);
+	    	if(distance <= shortestDistance)
+		{
+		    shortestDistance = distance;
+		    closestCastle = Main.instance.castles[i];
+		}
+	}
+
+	if(shortestDistance <= Follow_Distance)
+    	    navMesh.SetDestination(closestCastle.position);
     	is_moving = isMoving();
     	my_animator.SetBool("is_moving", is_moving);
     }
