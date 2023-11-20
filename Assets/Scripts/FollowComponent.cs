@@ -26,6 +26,7 @@ public class FollowComponent : MonoBehaviour
         my_animator = this.GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         navMesh.stoppingDistance = 3f;
+        navMesh.avoidancePriority = 0;
         is_moving = false;
     }
 
