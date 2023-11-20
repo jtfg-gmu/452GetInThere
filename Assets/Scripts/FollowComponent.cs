@@ -11,6 +11,7 @@ public class FollowComponent : MonoBehaviour
     public int Follow_Distance;
     private bool is_moving;
     private Animator my_animator;
+    private GameObject player;
 
     public bool isMoving()
     {
@@ -23,6 +24,7 @@ public class FollowComponent : MonoBehaviour
         m = Main.instance;
         navMesh = this.GetComponent<NavMeshAgent>();
         my_animator = this.GetComponent<Animator>();
+        player = GameObject.FindGameObjectWithTag("Player");
         navMesh.stoppingDistance = 3f;
         is_moving = false;
     }
@@ -30,19 +32,26 @@ public class FollowComponent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("player " + player);
         double shortestDistance = 2000000;
-        Transform closestCastle = null;
-
+        Transform closestObject = null;
+        
+        double distance = Vector3.Distance(this.gameObject.transform.position, player.transform.position);
+        if (distance <= shortestDistance)
+        {
+            shortestDistance = distance;
+            closestObject = player.transform;
+        }
         for (var i = 0; i < m.castleLocations.Length; i++)
         {
-            double distance = Vector3.Distance(this.gameObject.transform.position, m.castleLocations[i].transform.position);
+            distance = Vector3.Distance(this.gameObject.transform.position, m.castleLocations[i].transform.position);
             if (distance <= shortestDistance)
             {
                 shortestDistance = distance;
-                closestCastle = m.castleLocations[i];
+                closestObject = m.castleLocations[i];
             }
         }
-        navMesh.SetDestination(closestCastle.position);
+        navMesh.SetDestination(closestObject.position);
         is_moving = isMoving();
         my_animator.SetBool("is_moving", is_moving);
     }
