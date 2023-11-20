@@ -64,7 +64,8 @@ public class Main : MonoBehaviour
     {
         if (soldierCount <= soldierCountMax) //if we can still spawn another soldier
         {
-            GameObject.Instantiate(Resources.Load<GameObject>("Soldier"), soldierSpawnLocation.position, soldierSpawnLocation.rotation);
+            
+            GameObject soldier = GameObject.Instantiate(Resources.Load<GameObject>("Soldier"), new Vector3(soldierSpawnLocation.position.x,2f,soldierSpawnLocation.position.z), soldierSpawnLocation.rotation);
             soldierCount += 1;
         }
         else

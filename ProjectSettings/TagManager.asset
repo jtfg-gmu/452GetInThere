@@ -8,6 +8,8 @@ TagManager:
   - soldier
   - castle
   - floor
+  - Castle
+  - enemy
   layers:
   - Default
   - TransparentFX
