@@ -14,7 +14,7 @@ public class FollowComponent : MonoBehaviour
 
     public bool isMoving()
     {
-        return navMesh.remainingDistance <= navMesh.stoppingDistance;
+        return navMesh.remainingDistance > navMesh.stoppingDistance;
     }
 
     // Start is called before the first frame update
@@ -23,6 +23,7 @@ public class FollowComponent : MonoBehaviour
         m = Main.instance;
         navMesh = this.GetComponent<NavMeshAgent>();
         my_animator = this.GetComponent<Animator>();
+        navMesh.stoppingDistance = 3f;
         is_moving = false;
     }
 
@@ -41,9 +42,7 @@ public class FollowComponent : MonoBehaviour
                 closestCastle = m.castleLocations[i];
             }
         }
-
-        if (shortestDistance <= Follow_Distance)
-            navMesh.SetDestination(closestCastle.position);
+        navMesh.SetDestination(closestCastle.position);
         is_moving = isMoving();
         my_animator.SetBool("is_moving", is_moving);
     }
