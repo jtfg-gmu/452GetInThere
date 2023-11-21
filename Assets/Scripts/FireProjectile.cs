@@ -6,10 +6,14 @@ public class FireProjectile : MonoBehaviour
     private int numBullet;
     private FollowComponent soldierRef;
     private bool alreadyShootBullet;
+    private float fireRate;
+    private float fireTime;
     void Start()
     {
         soldierRef = transform.parent.gameObject.GetComponent<FollowComponent>();
         numBullet = 0;
+        fireRate = 0.5f;
+        fireTime = -1f;
         alreadyShootBullet = false;
     }
 
@@ -36,7 +40,13 @@ public class FireProjectile : MonoBehaviour
 
     private void CreateProjectile()
     {
-        GameObject projectTile = GameObject.Instantiate(Resources.Load<GameObject>("projectile"),transform.position,transform.rotation);
-        projectTile.GetComponent<Rigidbody>().velocity = transform.forward * 3f;
+        if (Time.time > fireTime)
+        {
+            fireTime = Time.time * fireRate;
+            GameObject projectTile = GameObject.Instantiate(Resources.Load<GameObject>("projectile"),transform.position,transform.rotation);
+            projectTile.GetComponent<Rigidbody>().velocity = transform.forward * 3f;
+            
+        }
+        
     }
 }
