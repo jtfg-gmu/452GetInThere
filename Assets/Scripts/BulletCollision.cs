@@ -19,9 +19,6 @@ public class BulletCollision : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("wall"))
-        {
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
 }
