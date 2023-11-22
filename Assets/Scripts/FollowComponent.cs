@@ -69,6 +69,7 @@ public class FollowComponent : MonoBehaviour
         
         if (!isAttacking && !isChasing)
         {
+            Debug.Log("pathing to allies");
             double shortestDistance = 2000000;
             Transform closestObject = null;
         
@@ -87,6 +88,7 @@ public class FollowComponent : MonoBehaviour
                     closestObject = m.castleLocations[i];
                 }
             }
+            Debug.Log("closest object is " + closestObject.gameObject);
             navMesh.SetDestination(closestObject.position);
             is_moving = isMoving();
             my_animator.SetBool("is_moving", is_moving);
