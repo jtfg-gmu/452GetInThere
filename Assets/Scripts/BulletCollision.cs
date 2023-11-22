@@ -17,8 +17,19 @@ public class BulletCollision : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
-        Destroy(gameObject);
+        
+        if (other.gameObject.CompareTag("enemy"))
+        {
+            Debug.Log("hit enemy");
+            Destroy(gameObject);
+        }
+        
     }
+
+    // private void O(Collision other)
+    // {
+    //     
+    // }
 }

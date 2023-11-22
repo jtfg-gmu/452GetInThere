@@ -44,16 +44,6 @@ public class FollowComponent : MonoBehaviour
     void Update()
     {
         float distToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
-        // if (distToEnemy <= chaseEnemyRange && !(distToEnemy <= attackEnemyRange))
-        // {
-        //     isAttacking = false;
-        //     navMesh.SetDestination(enemy.transform.position);
-        // }
-        // else if (distToEnemy <= chaseEnemyRange && distToEnemy <= attackkEnemyRange)
-        // {
-        //     navMesh.SetDestination(navMesh.transform.position);
-        //     isAttacking = true;
-        // }
 
         isAttacking = distToEnemy <= attackEnemyRange;
         isChasing = distToEnemy <= chaseEnemyRange; 
