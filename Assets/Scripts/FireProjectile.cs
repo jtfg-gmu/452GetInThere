@@ -27,7 +27,7 @@ public class FireProjectile : MonoBehaviour
             {
                 alreadyShootBullet = true;
                 CreateProjectile();
-                Invoke(nameof(ResetAttack),0.5f);
+                Invoke(nameof(ResetAttack),3f);
             }
             
         } 
@@ -40,13 +40,7 @@ public class FireProjectile : MonoBehaviour
 
     private void CreateProjectile()
     {
-        if (Time.time > fireTime)
-        {
-            fireTime = Time.time * fireRate;
-            GameObject projectTile = GameObject.Instantiate(Resources.Load<GameObject>("projectile"),transform.position,transform.rotation);
-            projectTile.GetComponent<Rigidbody>().velocity = transform.forward * 20f;
-            
-        }
-        
+        GameObject projectTile = GameObject.Instantiate(Resources.Load<GameObject>("projectile"),transform.position,transform.rotation);
+        projectTile.GetComponent<Rigidbody>().velocity = transform.forward * 20f;
     }
 }

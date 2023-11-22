@@ -16,7 +16,6 @@ public class FollowComponent : MonoBehaviour
     private float attackEnemyRange;
     public bool isChasing;
     public bool isAttacking;
-    private GameObject enemy;
 
     public bool isMoving()
     {
@@ -28,7 +27,6 @@ public class FollowComponent : MonoBehaviour
     {
         isAttacking = false;
         isChasing = false;
-        enemy = GameObject.FindGameObjectWithTag("enemy");
         chaseEnemyRange = 50f;
         attackEnemyRange = 15f;
         m = Main.instance;
@@ -43,10 +41,31 @@ public class FollowComponent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float distToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
+        GameObject enemy = GameObject.FindGameObjectWithTag("enemy");
+        if (enemy is not null)
+        {
+            float distToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
 
-        isAttacking = distToEnemy <= attackEnemyRange;
-        isChasing = distToEnemy <= chaseEnemyRange; 
+            isAttacking = distToEnemy <= attackEnemyRange;
+            isChasing = distToEnemy <= chaseEnemyRange; 
+            if (isChasing && !isAttacking)
+            {
+                navMesh.SetDestination(enemy.transform.position);
+            }
+
+            if (isAttacking && isChasing)
+            {
+                navMesh.SetDestination(transform.position);
+                transform.LookAt(enemy.transform);
+            }
+        }
+
+        if (enemy is null)
+        {
+            isAttacking = false;
+            isChasing = false;
+        }
+        
         
         if (!isAttacking && !isChasing)
         {
@@ -73,16 +92,7 @@ public class FollowComponent : MonoBehaviour
             my_animator.SetBool("is_moving", is_moving);
         }
 
-        if (isChasing && !isAttacking)
-        {
-            navMesh.SetDestination(enemy.transform.position);
-        }
-
-        if (isAttacking && isChasing)
-        {
-            navMesh.SetDestination(transform.position);
-            transform.LookAt(enemy.transform);
-        }
+        
         
         
     }

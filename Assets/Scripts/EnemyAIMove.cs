@@ -13,6 +13,7 @@ public class EnemyAIMove : MonoBehaviour
     Main m;
     private Transform[] castleLocations;
     private Boolean search;
+    public int health;
     void Start()
     {
         m = Main.instance;
@@ -20,6 +21,7 @@ public class EnemyAIMove : MonoBehaviour
         navMesh = GetComponent<NavMeshAgent>();
         navMesh.stoppingDistance = 2f;
         search = true;
+        health = 150;
 
     }
 

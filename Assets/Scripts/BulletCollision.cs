@@ -19,9 +19,21 @@ public class BulletCollision : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.gameObject.CompareTag("wall"))
+        {
+            Destroy(gameObject);
+        }
         if (other.gameObject.CompareTag("enemy"))
         {
+            EnemyAIMove enemyAIMove = other.gameObject.GetComponent<EnemyAIMove>();
+            if (enemyAIMove.health > 0)
+            {
+                enemyAIMove.health -= 2;
+                if (enemyAIMove.health == 0)
+                {
+                    Destroy(other.gameObject);
+                }
+            }
             Debug.Log("hit enemy");
             Destroy(gameObject);
         }
