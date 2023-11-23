@@ -14,6 +14,8 @@ public class EnemyAIMove : MonoBehaviour
     private Transform[] castleLocations;
     private Boolean search;
     public int health;
+    private NavMeshPath path;
+    private float elapsed = 0.0f;
     void Start()
     {
         m = Main.instance;
@@ -22,6 +24,8 @@ public class EnemyAIMove : MonoBehaviour
         navMesh.stoppingDistance = 2f;
         search = true;
         health = 150;
+        path = new NavMeshPath();
+        elapsed = 0.0f;
 
     }
 
@@ -53,6 +57,16 @@ public class EnemyAIMove : MonoBehaviour
     {
         Random rnd = new Random();
         int index = rnd.Next(castleLocations.Length);
+        elapsed += Time.deltaTime;
+        bool isPath = NavMesh.CalculatePath(transform.position, castleLocations[index].position, NavMesh.AllAreas, path);
+        while (!isPath)
+        {
+            rnd = new Random();
+            index = rnd.Next(castleLocations.Length);
+            isPath = NavMesh.CalculatePath(transform.position, castleLocations[index].position, NavMesh.AllAreas, path);
+        }
+        for (int i = 0; i < path.corners.Length - 1; i++)
+            Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red);
         navMesh.SetDestination(castleLocations[index].position);
     }
 
