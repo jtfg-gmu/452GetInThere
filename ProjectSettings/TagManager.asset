@@ -11,6 +11,7 @@ TagManager:
   - Castle
   - enemy
   - wall
+  - aoe_explosion
   layers:
   - Default
   - TransparentFX

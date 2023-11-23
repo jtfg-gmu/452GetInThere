@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.TextCore;
 using Random = System.Random;
 
 public class EnemyAIMove : MonoBehaviour
@@ -16,16 +18,25 @@ public class EnemyAIMove : MonoBehaviour
     public int health;
     private NavMeshPath path;
     private float elapsed = 0.0f;
+    private GameObject explosionAOE;
+    private bool canDoDamage;
+    private float curAttackTime;
+    private float attackTime;
     void Start()
     {
         m = Main.instance;
         castleLocations = m.castleLocations;
         navMesh = GetComponent<NavMeshAgent>();
         navMesh.stoppingDistance = 2f;
+        explosionAOE = transform.GetChild(2).gameObject;
+        explosionAOE.SetActive(false);
         search = true;
         health = 150;
         path = new NavMeshPath();
         elapsed = 0.0f;
+        canDoDamage = false;
+        curAttackTime = 0;
+        attackTime = 1.75f;
 
     }
 
@@ -45,12 +56,39 @@ public class EnemyAIMove : MonoBehaviour
 
         else if (search == false)
         {
-            if (reachAndStay())
+            if (reachAndStay() && !canDoDamage)
             {
+                canDoDamage = true;
+                curAttackTime = 0;
+                StartCoroutine(doAOEDmg());
+                attackCoolDown();
                 Invoke("attackThenChange",5f);
             }
+            
         }
+    }
 
+    private void attackCoolDown()
+    {
+        curAttackTime += Time.deltaTime;
+        if (curAttackTime >= attackTime)
+        {
+            canDoDamage = false;
+        }
+    }
+    
+
+    private IEnumerator doAOEDmg()
+    {
+        yield return new WaitForSeconds(0.25f);
+        explosionAOE.SetActive(true);
+        Collider[] collides = Physics.OverlapSphere(transform.position, 5f);
+        foreach (Collider c in collides)
+        {
+            Debug.Log(c.gameObject);
+        }
+        yield return new WaitForSeconds(1f);
+        explosionAOE.SetActive(false);
     }
 
     private void randomlyAttack()
@@ -73,5 +111,8 @@ public class EnemyAIMove : MonoBehaviour
     private void attackThenChange()
     {
         search = true;
+        explosionAOE.SetActive(false);
+        canDoDamage = false;
+        curAttackTime = 0;
     }
 }
