@@ -42,10 +42,11 @@ public class FollowComponent : MonoBehaviour
     void Update()
     {
         GameObject enemy = GameObject.FindGameObjectWithTag("enemy");
-        if (enemy is not null)
+        if (enemyStillAlive())
         {
-            float distToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
+            Transform closestEnemy = getClosestEnemy();
 
+            float distToEnemy = Vector3.Distance(transform.position, closestEnemy.position);
             isAttacking = distToEnemy <= attackEnemyRange;
             isChasing = distToEnemy <= chaseEnemyRange; 
             if (isChasing && !isAttacking)
@@ -60,7 +61,7 @@ public class FollowComponent : MonoBehaviour
             }
         }
 
-        if (enemy is null)
+        if (!enemyStillAlive())
         {
             isAttacking = false;
             isChasing = false;
@@ -93,9 +94,28 @@ public class FollowComponent : MonoBehaviour
             is_moving = isMoving();
             my_animator.SetBool("is_moving", is_moving);
         }
+        
+    }
 
-        
-        
-        
+    private bool enemyStillAlive()
+    {
+        return GameObject.FindGameObjectsWithTag("enemy").Length > 0;
+    }
+    private Transform getClosestEnemy()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("enemy");
+        GameObject enemy = null;
+        double minEnemyDist = 1000000;
+        foreach (var e in enemies)
+        {
+            double dist = Vector3.Distance(e.transform.position, transform.position);
+            if (dist <= minEnemyDist)
+            {
+                minEnemyDist = dist;
+                enemy = e;
+            }
+        }
+
+        return enemy.transform;
     }
 }
