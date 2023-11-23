@@ -41,7 +41,6 @@ public class FollowComponent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GameObject enemy = GameObject.FindGameObjectWithTag("enemy");
         if (enemyStillAlive())
         {
             Transform closestEnemy = getClosestEnemy();
@@ -51,13 +50,13 @@ public class FollowComponent : MonoBehaviour
             isChasing = distToEnemy <= chaseEnemyRange; 
             if (isChasing && !isAttacking)
             {
-                navMesh.SetDestination(enemy.transform.position);
+                navMesh.SetDestination(closestEnemy.position);
             }
 
             if (isAttacking && isChasing)
             {
                 navMesh.SetDestination(transform.position);
-                transform.LookAt(enemy.transform);
+                transform.LookAt(closestEnemy.transform);
             }
         }
 
