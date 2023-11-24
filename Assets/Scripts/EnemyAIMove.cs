@@ -22,6 +22,10 @@ public class EnemyAIMove : MonoBehaviour
     private bool canDoDamage;
     private float curAttackTime;
     private float attackTime;
+    private float soldierSearchRange;
+    private float soldierAttackRange;
+    private bool soldierInSearchRange;
+    private bool soldierInAttackRange;
     void Start()
     {
         m = Main.instance;
@@ -35,8 +39,12 @@ public class EnemyAIMove : MonoBehaviour
         path = new NavMeshPath();
         elapsed = 0.0f;
         canDoDamage = false;
-        curAttackTime = 0;
+        curAttackTime = 0f;
         attackTime = 1.75f;
+        soldierSearchRange = 30f;
+        soldierAttackRange = 4f;
+        soldierInSearchRange = false;
+        soldierInAttackRange = false;
 
     }
 
@@ -59,13 +67,12 @@ public class EnemyAIMove : MonoBehaviour
             if (reachAndStay() && !canDoDamage)
             {
                 canDoDamage = true;
-                curAttackTime = 0;
+                curAttackTime = 0f;
                 StartCoroutine(doAOEDmg());
-                attackCoolDown();
                 Invoke("attackThenChange",5f);
             }
-            
         }
+        attackCoolDown();
     }
 
     private void attackCoolDown()
@@ -82,30 +89,87 @@ public class EnemyAIMove : MonoBehaviour
     {
         yield return new WaitForSeconds(0.25f);
         explosionAOE.SetActive(true);
-        Collider[] collides = Physics.OverlapSphere(transform.position, 5f);
+        Collider[] collides = Physics.OverlapSphere(transform.position, 7f);
         foreach (Collider c in collides)
         {
-            Debug.Log(c.gameObject);
+            if (c.gameObject.CompareTag("soldier"))
+            {
+                FollowComponent followComponent = c.gameObject.GetComponent<FollowComponent>();
+                followComponent.health -= 3;
+                if (followComponent.health <= 0)
+                {
+                    Destroy(c.gameObject);
+                }
+            }
         }
         yield return new WaitForSeconds(1f);
         explosionAOE.SetActive(false);
     }
 
+    private bool isSoldierStillAlive()
+    {
+        return GameObject.FindGameObjectsWithTag("soldier").Length > 0;
+    }
+
     private void randomlyAttack()
     {
-        Random rnd = new Random();
-        int index = rnd.Next(castleLocations.Length);
-        elapsed += Time.deltaTime;
-        bool isPath = NavMesh.CalculatePath(transform.position, castleLocations[index].position, NavMesh.AllAreas, path);
-        while (!isPath)
+        if (isSoldierStillAlive())
         {
-            rnd = new Random();
-            index = rnd.Next(castleLocations.Length);
-            isPath = NavMesh.CalculatePath(transform.position, castleLocations[index].position, NavMesh.AllAreas, path);
+            float distToSoldier = Vector3.Distance(transform.position,closestSoldier().position);
+            soldierInSearchRange = distToSoldier <= soldierSearchRange;
+            soldierInAttackRange = distToSoldier <= soldierAttackRange;
+            if (soldierInSearchRange && !soldierInAttackRange)
+            {
+                navMesh.SetDestination(closestSoldier().position);
+            }
+
+            if (soldierInAttackRange && soldierInSearchRange)
+            {
+                navMesh.SetDestination(transform.position);
+            }
         }
-        for (int i = 0; i < path.corners.Length - 1; i++)
-            Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red);
-        navMesh.SetDestination(castleLocations[index].position);
+
+        if (!isSoldierStillAlive())
+        {
+            soldierInAttackRange = false;
+            soldierInSearchRange = false;
+        }
+
+        if (!soldierInAttackRange && !soldierInSearchRange)
+        {
+            Random rnd = new Random();
+            int index = rnd.Next(castleLocations.Length);
+            elapsed += Time.deltaTime;
+            bool isPath = NavMesh.CalculatePath(transform.position, castleLocations[index].position, NavMesh.AllAreas, path);
+            Debug.Log(gameObject + " path to " + castleLocations[index].gameObject + " " + isPath);
+            while (!isPath)
+            {
+                rnd = new Random();
+                index = rnd.Next(castleLocations.Length);
+                isPath = NavMesh.CalculatePath(transform.position, castleLocations[index].position, NavMesh.AllAreas, path);
+            }
+            for (int i = 0; i < path.corners.Length - 1; i++)
+                Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red);
+            navMesh.SetDestination(castleLocations[index].position);
+        }
+    }
+
+    private Transform closestSoldier()
+    {
+        GameObject[] soldiers = GameObject.FindGameObjectsWithTag("soldier");
+        Transform closestSoldier = null;
+        float dist = 1000000;
+        foreach (var soldier in soldiers)
+        {
+            float cur = Vector3.Distance(transform.position, soldier.transform.position);
+            if (cur <= dist)
+            {
+                dist = cur;
+                closestSoldier = soldier.transform;
+            }
+        }
+
+        return closestSoldier;
     }
 
     private void attackThenChange()

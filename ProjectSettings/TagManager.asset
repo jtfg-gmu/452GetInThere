@@ -12,6 +12,7 @@ TagManager:
   - enemy
   - wall
   - aoe_explosion
+  - guardian
   layers:
   - Default
   - TransparentFX

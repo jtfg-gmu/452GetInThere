@@ -16,6 +16,7 @@ public class FollowComponent : MonoBehaviour
     private float attackEnemyRange;
     public bool isChasing;
     public bool isAttacking;
+    public int health;
 
     public bool isMoving()
     {
@@ -36,6 +37,7 @@ public class FollowComponent : MonoBehaviour
         navMesh.stoppingDistance = 3f;
         navMesh.avoidancePriority = 0;
         is_moving = false;
+        health = 50;
     }
 
     // Update is called once per frame
