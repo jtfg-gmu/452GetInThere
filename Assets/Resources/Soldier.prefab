@@ -153,7 +153,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
       propertyPath: m_LocalScale.x
@@ -169,15 +169,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.02
+      value: -1.1011257
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.72
+      value: 0.00000047683716
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -33.405
+      value: -30.357227
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
       propertyPath: m_LocalRotation.w
@@ -372,7 +372,7 @@ MeshCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
@@ -603,6 +603,7 @@ MonoBehaviour:
   Follow_Distance: 0
   isChasing: 0
   isAttacking: 0
+  health: 0
 --- !u!95 &9130843457055711902
 Animator:
   serializedVersion: 5

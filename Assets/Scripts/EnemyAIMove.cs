@@ -42,7 +42,7 @@ public class EnemyAIMove : MonoBehaviour
         curAttackTime = 0f;
         attackTime = 1.75f;
         soldierSearchRange = 30f;
-        soldierAttackRange = 4f;
+        soldierAttackRange = 1f;
         soldierInSearchRange = false;
         soldierInAttackRange = false;
 
@@ -87,9 +87,9 @@ public class EnemyAIMove : MonoBehaviour
 
     private IEnumerator doAOEDmg()
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(1f);
         explosionAOE.SetActive(true);
-        Collider[] collides = Physics.OverlapSphere(transform.position, 7f);
+        Collider[] collides = Physics.OverlapSphere(transform.position, 2f);
         foreach (Collider c in collides)
         {
             if (c.gameObject.CompareTag("soldier"))
@@ -120,6 +120,7 @@ public class EnemyAIMove : MonoBehaviour
             soldierInAttackRange = distToSoldier <= soldierAttackRange;
             if (soldierInSearchRange && !soldierInAttackRange)
             {
+                navMesh.stoppingDistance = 0.5f;
                 navMesh.SetDestination(closestSoldier().position);
             }
 
