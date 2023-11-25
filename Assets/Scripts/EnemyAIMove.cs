@@ -1,5 +1,8 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Net;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,10 +22,12 @@ public class EnemyAIMove : MonoBehaviour
     private float soldierAttackRange;
     private bool soldierInSearchRange;
     private bool soldierInAttackRange;
+    public bool isTaunt;
+    private bool canAttackGuardian;
     void Start()
     {
         m = Main.instance;
-        castleLocations = m.castleLocations;
+        castleLocations = m.castleLocations; 
         navMesh = GetComponent<NavMeshAgent>();
         navMesh.stoppingDistance = 0.5f;
         explosionAOE = transform.GetChild(2).gameObject;
@@ -36,6 +41,8 @@ public class EnemyAIMove : MonoBehaviour
         soldierAttackRange = 1f;
         soldierInSearchRange = false;
         soldierInAttackRange = false;
+        canAttackGuardian = false;
+        isTaunt = false;
 
     }
 
@@ -47,27 +54,59 @@ public class EnemyAIMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!attackNearbySoldiers())
+        if (isTaunt)
         {
-            if (search)
+            Debug.Log("enemy distance to gaurdian " + navMesh.remainingDistance);
+            Transform guardian = tauntingGuardian();
+            if (!canAttackGuardian)
             {
-                randomlyAttack();
-                search = false;
+                float dist = Vector3.Distance(transform.position, guardian.position);
+                navMesh.SetDestination(guardian.position);
+                if (dist <= 1)
+                {
+                    canAttackGuardian = true;
+                }
             }
 
-            else if (search == false)
+            if (canAttackGuardian)
             {
-                if (reachAndStay() && !canDoDamage)
+               
+                navMesh.SetDestination(transform.position);
+                if (!canDoDamage)
                 {
                     canDoDamage = true;
                     curAttackTime = 0f;
                     StartCoroutine(doAOEDmg());
-                    Invoke("attackThenChange",5f);
                 }
+                Invoke("removeTauntEffect",6f);
             }
-        
             attackCoolDown();
         }
+        else
+        {
+            if (!attackNearbySoldiers())
+            {
+                if (search)
+                {
+                    randomlyAttack();
+                    search = false;
+                }
+
+                else if (search == false)
+                {
+                    if (reachAndStay() && !canDoDamage)
+                    {
+                        canDoDamage = true;
+                        curAttackTime = 0f;
+                        StartCoroutine(doAOEDmg());
+                        Invoke("attackThenChange",5f);
+                    }
+                }
+        
+                attackCoolDown();
+            }
+        }
+        
         
     }
 
@@ -134,6 +173,12 @@ public class EnemyAIMove : MonoBehaviour
             canDoDamage = false;
         }
     }
+
+    private void removeTauntEffect()
+    {
+        isTaunt = false;
+        canAttackGuardian = false;
+    }
     
 
     private IEnumerator doAOEDmg()
@@ -143,6 +188,7 @@ public class EnemyAIMove : MonoBehaviour
         Collider[] collides = Physics.OverlapSphere(transform.position, 2f);
         foreach (Collider c in collides)
         {
+            Debug.Log("hit soldier or guardian " + c.gameObject);
             if (c.gameObject.CompareTag("soldier"))
             {
                 FollowComponent followComponent = c.gameObject.GetComponent<FollowComponent>();
@@ -164,7 +210,6 @@ public class EnemyAIMove : MonoBehaviour
 
     private Transform closestCastle()
     {
-        GameObject[] towers = GameObject.FindGameObjectsWithTag("castle");
         Transform closestTar = null;
         float dist = 1000000;
         foreach (var tower in castleLocations)
@@ -174,6 +219,24 @@ public class EnemyAIMove : MonoBehaviour
             {
                 dist = cur;
                 closestTar = tower.transform;
+            }
+        }
+
+        return closestTar;
+    }
+
+    private Transform tauntingGuardian()
+    {
+        Transform closestTar = null;
+        GameObject[] guardians = GameObject.FindGameObjectsWithTag("guardian");
+        float dist = 1000000;
+        foreach (var guardian in guardians)
+        {
+            float cur = Vector3.Distance(transform.position, guardian.transform.position);
+            if (cur <= dist)
+            {
+                dist = cur;
+                closestTar = guardian.transform;
             }
         }
 

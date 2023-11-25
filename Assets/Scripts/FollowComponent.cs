@@ -17,7 +17,6 @@ public class FollowComponent : MonoBehaviour
     public bool isChasing;
     public bool isAttacking;
     public int health;
-
     public bool isMoving()
     {
         return navMesh.remainingDistance > navMesh.stoppingDistance;
@@ -97,7 +96,7 @@ public class FollowComponent : MonoBehaviour
         }
         
     }
-
+    
     private bool enemyStillAlive()
     {
         return GameObject.FindGameObjectsWithTag("enemy").Length > 0;
