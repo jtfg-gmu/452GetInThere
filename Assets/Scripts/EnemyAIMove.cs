@@ -1,8 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Net;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -188,13 +185,24 @@ public class EnemyAIMove : MonoBehaviour
         Collider[] collides = Physics.OverlapSphere(transform.position, 2f);
         foreach (Collider c in collides)
         {
-            Debug.Log("hit soldier or guardian " + c.gameObject);
             if (c.gameObject.CompareTag("soldier"))
             {
                 FollowComponent followComponent = c.gameObject.GetComponent<FollowComponent>();
                 followComponent.health -= 3;
                 if (followComponent.health <= 0)
                 {
+                    Destroy(c.gameObject);
+                }
+            }
+
+            if (c.gameObject.CompareTag("guardian"))
+            {
+                GuardianBehavior guardianBehavior = c.gameObject.GetComponent<GuardianBehavior>();
+                guardianBehavior.health -= 3;
+                if (guardianBehavior.health <= 0)
+                {
+                    isTaunt = false;
+                    attackThenChange();
                     Destroy(c.gameObject);
                 }
             }
