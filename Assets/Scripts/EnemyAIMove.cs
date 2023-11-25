@@ -1,12 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.TextCore;
-using Random = System.Random;
 
 public class EnemyAIMove : MonoBehaviour
 {
@@ -16,8 +11,6 @@ public class EnemyAIMove : MonoBehaviour
     private Transform[] castleLocations;
     private Boolean search;
     public int health;
-    private NavMeshPath path;
-    private float elapsed = 0.0f;
     private GameObject explosionAOE;
     private bool canDoDamage;
     private float curAttackTime;
@@ -31,17 +24,15 @@ public class EnemyAIMove : MonoBehaviour
         m = Main.instance;
         castleLocations = m.castleLocations;
         navMesh = GetComponent<NavMeshAgent>();
-        navMesh.stoppingDistance = 2f;
+        navMesh.stoppingDistance = 0.5f;
         explosionAOE = transform.GetChild(2).gameObject;
         explosionAOE.SetActive(false);
         search = true;
         health = 150;
-        path = new NavMeshPath();
-        elapsed = 0.0f;
         canDoDamage = false;
         curAttackTime = 0f;
         attackTime = 1.75f;
-        soldierSearchRange = 30f;
+        soldierSearchRange = 15f;
         soldierAttackRange = 1f;
         soldierInSearchRange = false;
         soldierInAttackRange = false;
@@ -56,23 +47,83 @@ public class EnemyAIMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (search)
+        if (!attackNearbySoldiers())
         {
-            randomlyAttack();
-            search = false;
-        }
-
-        else if (search == false)
-        {
-            if (reachAndStay() && !canDoDamage)
+            if (search)
             {
-                canDoDamage = true;
-                curAttackTime = 0f;
-                StartCoroutine(doAOEDmg());
-                Invoke("attackThenChange",5f);
+                randomlyAttack();
+                search = false;
+            }
+
+            else if (search == false)
+            {
+                if (reachAndStay() && !canDoDamage)
+                {
+                    canDoDamage = true;
+                    curAttackTime = 0f;
+                    StartCoroutine(doAOEDmg());
+                    Invoke("attackThenChange",5f);
+                }
+            }
+        
+            attackCoolDown();
+        }
+        
+    }
+
+    private bool attackNearbySoldiers()
+    {
+        GameObject[] soldiers = GameObject.FindGameObjectsWithTag("soldier");
+        if (soldiers.Length == 0)
+        {
+            return false;
+        }
+        float dist = 1000000;
+        Transform closestSoldier = null;
+        foreach (var soldier in soldiers)
+        {
+            float cur = Vector3.Distance(transform.position, soldier.transform.position);
+            if (cur <= dist)
+            {
+                dist = cur;
+                closestSoldier = soldier.transform;
             }
         }
-        attackCoolDown();
+
+        if (closestSoldier is null)
+        {
+            soldierInSearchRange = false;
+            soldierInAttackRange = false;
+            return false;
+        }
+
+        soldierInSearchRange = dist <= soldierSearchRange;
+        soldierInAttackRange = dist <= soldierAttackRange;
+
+        if (soldierInSearchRange && !soldierInAttackRange)
+        {
+            navMesh.SetDestination(closestSoldier.position);
+            return true;
+        }
+
+        if (!soldierInAttackRange && !soldierInSearchRange)
+        {
+            soldierInSearchRange = false;
+            soldierInAttackRange = false;
+            return false;
+        }
+
+        if (soldierInAttackRange && soldierInSearchRange && !canDoDamage)
+        {
+            canDoDamage = true;
+            navMesh.SetDestination(transform.position);
+            curAttackTime = 0f;
+            StartCoroutine(doAOEDmg());
+            Invoke("attackThenChange",5f);
+            attackCoolDown();
+            return true;
+        }
+        return false;
     }
 
     private void attackCoolDown()
@@ -106,71 +157,27 @@ public class EnemyAIMove : MonoBehaviour
         explosionAOE.SetActive(false);
     }
 
-    private bool isSoldierStillAlive()
-    {
-        return GameObject.FindGameObjectsWithTag("soldier").Length > 0;
-    }
-
     private void randomlyAttack()
-    {
-        if (isSoldierStillAlive())
-        {
-            float distToSoldier = Vector3.Distance(transform.position,closestSoldier().position);
-            soldierInSearchRange = distToSoldier <= soldierSearchRange;
-            soldierInAttackRange = distToSoldier <= soldierAttackRange;
-            if (soldierInSearchRange && !soldierInAttackRange)
-            {
-                navMesh.stoppingDistance = 0.5f;
-                navMesh.SetDestination(closestSoldier().position);
-            }
-
-            if (soldierInAttackRange && soldierInSearchRange)
-            {
-                navMesh.SetDestination(transform.position);
-            }
-        }
-
-        if (!isSoldierStillAlive())
-        {
-            soldierInAttackRange = false;
-            soldierInSearchRange = false;
-        }
-
-        if (!soldierInAttackRange && !soldierInSearchRange)
-        {
-            Random rnd = new Random();
-            int index = rnd.Next(castleLocations.Length);
-            elapsed += Time.deltaTime;
-            bool isPath = NavMesh.CalculatePath(transform.position, castleLocations[index].position, NavMesh.AllAreas, path);
-            Debug.Log(gameObject + " path to " + castleLocations[index].gameObject + " " + isPath);
-            while (!isPath)
-            {
-                rnd = new Random();
-                index = rnd.Next(castleLocations.Length);
-                isPath = NavMesh.CalculatePath(transform.position, castleLocations[index].position, NavMesh.AllAreas, path);
-            }
-            for (int i = 0; i < path.corners.Length - 1; i++)
-                Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red);
-            navMesh.SetDestination(castleLocations[index].position);
-        }
+    { 
+        navMesh.SetDestination(closestCastle().position);
     }
 
-    private Transform closestSoldier()
+    private Transform closestCastle()
     {
-        GameObject[] soldiers = GameObject.FindGameObjectsWithTag("soldier");
-        Transform closestSoldier = null;
+        GameObject[] towers = GameObject.FindGameObjectsWithTag("castle");
+        Transform closestTar = null;
         float dist = 1000000;
-        foreach (var soldier in soldiers)
+        foreach (var tower in castleLocations)
         {
-            float cur = Vector3.Distance(transform.position, soldier.transform.position);
+            float cur = Vector3.Distance(transform.position, tower.transform.position);
             if (cur <= dist)
             {
                 dist = cur;
-                closestSoldier = soldier.transform;
+                closestTar = tower.transform;
             }
         }
 
-        return closestSoldier;
+        return closestTar;
     }
 
     private void attackThenChange()
