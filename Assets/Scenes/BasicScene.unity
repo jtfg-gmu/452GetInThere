@@ -2022,6 +2022,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 937694665857723642, guid: 22a50e08f7382384288b811b10511559, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2539251986851172279, guid: 22a50e08f7382384288b811b10511559, type: 3}
       propertyPath: m_RootOrder
       value: 13
@@ -2068,14 +2072,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3839815696786446295, guid: 22a50e08f7382384288b811b10511559, type: 3}
       propertyPath: m_Name
-      value: guardian
-      objectReference: {fileID: 0}
-    - target: {fileID: 3839815696786446295, guid: 22a50e08f7382384288b811b10511559, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3839815696786446295, guid: 22a50e08f7382384288b811b10511559, type: 3}
-      propertyPath: m_TagString
       value: guardian
       objectReference: {fileID: 0}
     m_RemovedComponents: []

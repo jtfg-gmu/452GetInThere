@@ -13,6 +13,7 @@ TagManager:
   - wall
   - aoe_explosion
   - guardian
+  - taunt_aoe
   layers:
   - Default
   - TransparentFX
