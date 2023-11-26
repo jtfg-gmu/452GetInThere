@@ -15,7 +15,9 @@ public class GuardianBehavior : GITBeing
 
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
+        allyTag = new string[0];
+        enemyTag = new string[] { "enemy" };
+        agent = navMesh = GetComponent<NavMeshAgent>();
         agent.stoppingDistance = 2f;
         maxHealth = 230;
         tauntSearchRange = 12f;
@@ -98,6 +100,6 @@ public class GuardianBehavior : GITBeing
 
     private Transform getClosestEnemy()
     {
-        return closestOfTag("enemy");
+        return closestOfTag(enemyTag);
     }
 }

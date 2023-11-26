@@ -16,6 +16,7 @@ public class SoldierBehaviour : GITBeing
         my_animator = this.GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         maxHealth = 50;
+        pursueRange = 15f;
         base.Start();
 
     }

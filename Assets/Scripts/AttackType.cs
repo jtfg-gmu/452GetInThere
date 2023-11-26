@@ -44,16 +44,18 @@ public abstract class AttackType : MonoBehaviour
 
 public class AttackAOE : AttackType
 {
+    public GameObject waveDisplay;
     protected override void Start()
     {
         attackRange = 2f;
-        dmg = 3.0f;
+        dmg = 20.0f;
         reloadTime = 3f;
         attackTime = 0.5f;
         base.Start();
     }
     protected override void Attack()
     {
+        waveDisplay.SetActive(true);
         Collider[] collides = Physics.OverlapSphere(transform.position, 2f);
         lastAttacked = collides;
         foreach (Collider c in collides)
@@ -70,6 +72,11 @@ public class AttackAOE : AttackType
                 }
             }
         }
+    }
+    protected override void ResetAttack()
+    {
+        waveDisplay.SetActive(false);
+        base.ResetAttack();
     }
 }
 

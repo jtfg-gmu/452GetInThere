@@ -23,11 +23,12 @@ public class EnemyBehaviour : GITBeing
         attackType = gameObject.AddComponent<AttackAOE>();
         pursueRange = 15f;
         base.Start();
-        allyTag = new string[] { "enemy", "castle" };
+        allyTag = new string[] { "enemy", "Castle" };
         enemyTag = new string[] { "soldier" };
         navMesh.stoppingDistance = 0.5f;
         explosionAOE = gameObject.transform.GetChild(2).gameObject;
         explosionAOE.SetActive(false);
+        GetComponent<AttackAOE>().waveDisplay = explosionAOE;
         search = true;
         canDoDamage = false;
         curAttackTime = 0f;
@@ -40,9 +41,8 @@ public class EnemyBehaviour : GITBeing
     }
 
     // Update is called once per frame
-    void Update()
+    protected void LateUpdate()
     {
-        base.Update();
         if(attackType.status == AttackStatus.wait)
         {
             if(attackType.lastAttacked.Any(x=> x.CompareTag("guardian"))){
@@ -167,7 +167,7 @@ public class EnemyBehaviour : GITBeing
         explosionAOE.SetActive(false);
     }
 
-    private void randomlyAttack()
+    /*private void randomlyAttack()
     { 
         navMesh.SetDestination(closestCastle().position);
     }
@@ -181,7 +181,7 @@ public class EnemyBehaviour : GITBeing
     private Transform tauntingGuardian()
     {
         return closestOfTag("guardian", 1000000);
-    }
+    }*/
 
     private void attackThenChange()
     {
