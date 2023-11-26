@@ -25,15 +25,8 @@ public class BulletCollision : MonoBehaviour
         }
         if (other.gameObject.CompareTag("enemy"))
         {
-            EnemyAIMove enemyAIMove = other.gameObject.GetComponent<EnemyAIMove>();
-            if (enemyAIMove.health > 0)
-            {
-                enemyAIMove.health -= 2;
-                if (enemyAIMove.health == 0)
-                {
-                    Destroy(other.gameObject);
-                }
-            }
+            EnemyBehaviour enemyAIMove = other.gameObject.GetComponent<EnemyBehaviour>();
+            enemyAIMove.TakeDamage(2.0f);
             Debug.Log("hit enemy");
             Destroy(gameObject);
         }

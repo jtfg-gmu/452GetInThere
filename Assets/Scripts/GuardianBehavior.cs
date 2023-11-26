@@ -2,11 +2,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class GuardianBehavior : MonoBehaviour
+public class GuardianBehavior : GITBeing
 {
     // Start is called before the first frame update
     private NavMeshAgent agent;
-    public int health;
     private float tauntSearchRange;
     private float tauntAttackRange;
     private GameObject tauntAOEObj;
@@ -18,18 +17,18 @@ public class GuardianBehavior : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         agent.stoppingDistance = 2f;
-        health = 230;
+        maxHealth = 230;
         tauntSearchRange = 12f;
         tauntAttackRange = 3f;
         tauntAOEObj = transform.GetChild(2).gameObject;
         releaseAOE = false;
         skillCoolDown = 2f;
         curSkillTime = 0;
-    ;
-}
+        base.Start();
+    }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
         if (isEnemyAlive())
         {
@@ -80,7 +79,7 @@ public class GuardianBehavior : MonoBehaviour
         {
             if (c.gameObject.CompareTag("enemy"))
             {
-                EnemyAIMove enemy = c.gameObject.GetComponent<EnemyAIMove>();
+                EnemyBehaviour enemy = c.gameObject.GetComponent<EnemyBehaviour>();
                 enemy.isTaunt = true; 
             }
         }
@@ -99,19 +98,6 @@ public class GuardianBehavior : MonoBehaviour
 
     private Transform getClosestEnemy()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("enemy");
-        Transform closestEnemy = null;
-        float minDist = 1000000;
-        foreach (var e in enemies)
-        {
-            float dist = Vector3.Distance(transform.position, e.transform.position);
-            if (dist <= minDist)
-            {
-                minDist = dist;
-                closestEnemy = e.transform;
-            }
-        }
-
-        return closestEnemy;
+        return closestOfTag("enemy");
     }
 }

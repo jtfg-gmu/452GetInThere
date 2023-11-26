@@ -1,15 +1,21 @@
 using UnityEngine;
+using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class Main : MonoBehaviour
 {
 
 
     public static Main instance;
+    [SerializeField] Transform player;
     [SerializeField] public Transform[] castleLocations;
     [SerializeField] Transform soldierSpawnLocation;
-
+    [SerializeField] Transform soldierTop;
     [SerializeField] int soldierCountMax;
     private int soldierCount;
+    private GameObject soldierFab;
+    
+    private XRInteractionManager xrim;
 
     //Something similar can be implemented for enemy soldiers.
 
@@ -18,6 +24,7 @@ public class Main : MonoBehaviour
 
     void Awake()
     {
+        soldierFab = Resources.Load<GameObject>("Soldier");
         instance = this;
     }
 
@@ -26,6 +33,8 @@ public class Main : MonoBehaviour
     {
         nextWaveTimer = nextWaveDefault;
         soldierCount = 0;
+        if(!(xrim = FindObjectOfType<XRInteractionManager>())) Debug.LogError("MAIN: Can't find XRIM!");
+        if (castleLocations.Length == 0) { Debug.LogError("MAIN: No castle locations initialized!"); return; }
         CreateCastles();
         SpawnWave();
     }
@@ -46,7 +55,7 @@ public class Main : MonoBehaviour
     private void CreateCastles()
     {
         GameObject go;
-        if (castleLocations.Length == 0) { Debug.LogError("No castle locations initialized!"); return; }
+        
         for (var i = 0; i < castleLocations.Length; i++)
         {
             go = Instantiate(Resources.Load<GameObject>("Castle"), castleLocations[i].position, castleLocations[i].rotation);
@@ -65,7 +74,11 @@ public class Main : MonoBehaviour
         if (soldierCount <= soldierCountMax) //if we can still spawn another soldier
         {
             
-            GameObject soldier = GameObject.Instantiate(Resources.Load<GameObject>("Soldier"), new Vector3(soldierSpawnLocation.position.x,2f,soldierSpawnLocation.position.z), soldierSpawnLocation.rotation);
+            GameObject soldier = GameObject.Instantiate(soldierFab, soldierSpawnLocation, true);
+            soldier.transform.position += new Vector3(0, 2, 0);
+            soldier.transform.parent = soldierTop;
+            soldier.name = "Soldier " + soldierCount;
+            soldier.GetComponent<XRGrabInteractable>().interactionManager = xrim;
             soldierCount += 1;
         }
         else
