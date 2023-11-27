@@ -7,7 +7,7 @@ public class SoldierBehaviour : GITBeing
     private GameObject player;
 
     // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
         
         attackType = gameObject.AddComponent<AttackProjectile>();
@@ -16,7 +16,7 @@ public class SoldierBehaviour : GITBeing
         my_animator = this.GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         maxHealth = 50;
-        pursueRange = 15f;
+        pursueRange = 50;
         base.Start();
 
     }
@@ -26,9 +26,16 @@ public class SoldierBehaviour : GITBeing
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
         base.Update(); 
         my_animator.SetBool("is_moving", status == BeingStatus.idle);
+    }
+
+    protected override void PrepareToAttack()
+    {
+        navMesh.stoppingDistance = 3.2f;
+        navMesh.SetDestination(transform.position);
+        transform.LookAt(closestTarget.transform);
     }
 }

@@ -13,7 +13,7 @@ public class GuardianBehavior : GITBeing
     private float skillCoolDown;
     private float curSkillTime;
 
-    void Start()
+    new void Start()
     {
         allyTag = new string[0];
         enemyTag = new string[] { "enemy" };

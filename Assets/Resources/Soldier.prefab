@@ -34,7 +34,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -23
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
       propertyPath: m_LocalRotation.w
@@ -148,6 +148,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1997371324124627957, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2787884261642485034, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
       propertyPath: m_Layer
       value: 0
@@ -159,10 +163,6 @@ PrefabInstance:
     - target: {fileID: 3037236173722065251, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
       propertyPath: m_Layer
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3062149039630503678, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 4225618613154219681, guid: 63efd1a90d5e31e4d82938e806c499ab, type: 3}
       propertyPath: m_Layer
@@ -288,12 +288,13 @@ MonoBehaviour:
   m_InteractionManager: {fileID: 0}
   m_Colliders:
   - {fileID: 5660719016887078013}
+  - {fileID: -3440160998786476187}
   m_InteractionLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
     m_Bits: 1
-  m_DistanceCalculationMode: 1
+  m_DistanceCalculationMode: 2
   m_SelectMode: 0
   m_FocusMode: 1
   m_CustomReticle: {fileID: 0}
@@ -461,6 +462,7 @@ MonoBehaviour:
   status: 0
   allyTag: []
   enemyTag: []
+  closestTarget: {fileID: 0}
   attackType: {fileID: 0}
   navMesh: {fileID: 3683769051936257893}
 --- !u!95 &9130843457055711902

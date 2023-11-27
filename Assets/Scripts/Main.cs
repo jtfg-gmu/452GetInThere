@@ -83,7 +83,7 @@ public class Main : MonoBehaviour
         }
         else
         {
-            Debug.Log("Skipped soldier spawn due to max number of soldiers");
+            Debug.Log("Skipped soldier spawn due to max number of soldiers");   
             this.CancelInvoke();
         }
 

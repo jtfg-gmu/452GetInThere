@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,34 +20,42 @@ public class GITBeing : MonoBehaviour
     [HideInInspector] public NavMeshAgent navMesh;//NavMeshAgent for this being.
     protected float pursueRange; //Pursuit range for enemies of this being.
 
+    protected int countdown;
+    protected int countdownmax = 100;//Frames to wait after retargeting.
+    private float defaultStoppingRange;
     protected void Start()
     {
         m = Main.instance;
         navMesh = GetComponentInChildren<NavMeshAgent>();
+        defaultStoppingRange = navMesh.stoppingDistance;
         health = maxHealth;
+        
         closestTarget = null;
     }
 
     protected virtual void Update()
     {
+
         if (health > 0)
         {
             //Debug.Log("One");
             if (aliveOfTag(enemyTag[0]))
             {
-                //Debug.Log("Two");
+                    //Debug.Log("Two");
                 if (closestTarget = closestOfTag(enemyTag, pursueRange))
-                {
-                    //Debug.Log("Three");
-                    //PATH TO ENEMIES
-                    //Debug.Log(gameObject.name + ": closest object is an enemy -- " + closestTarget.name);
+                    {
+                        //Debug.Log("Three");
+                        //PATH TO ENEMIES
+                        //Debug.Log(gameObject.name + ": closest object is an enemy -- " + closestTarget.name);
                     float distToEnemy = Vector3.Distance(transform.position, closestTarget.position);
-                    status = (distToEnemy <= attackType.attackRange) ? BeingStatus.attack :
-                        ((distToEnemy <= pursueRange) ? BeingStatus.chase : BeingStatus.regroup);
+                    bool insidePursue = distToEnemy <= pursueRange;
+                    bool insideAttack = distToEnemy <= attackType.attackRange;
+                    status = (insidePursue && insideAttack) ? BeingStatus.attack :
+                        ((insidePursue) ? BeingStatus.chase : BeingStatus.regroup);
                     if (InHostileAction())
                     {
-                        navMesh.SetDestination(closestTarget.position);
                         if (status == BeingStatus.attack) PrepareToAttack();
+                        else navMesh.stoppingDistance = defaultStoppingRange;
                     }
                 }
             }
@@ -57,7 +66,15 @@ public class GITBeing : MonoBehaviour
                 closestTarget = closestOfTag(allyTag, pursueRange * 10);
             }
             //Debug.Log("closest object is " + closestTarget.gameObject);
-            if(closestTarget != null) navMesh.SetDestination(closestTarget.position);
+            if (closestTarget != null)
+            {
+                if (countdown == 0)
+                {
+                    navMesh.SetDestination(closestTarget.position); //only switch targets if it makes sense to
+                    countdown = countdownmax;
+                }
+                else countdown--;
+            }
             else navMesh.SetDestination(transform.position);
             if (ShouldStop()) status = BeingStatus.idle;
             transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);//reset tilt
@@ -115,7 +132,7 @@ public class GITBeing : MonoBehaviour
     /// <summary>
     /// Causes character to stand still and point towards target
     /// </summary>
-    protected void PrepareToAttack()
+    protected virtual void PrepareToAttack()
     {
         navMesh.SetDestination(transform.position);
         transform.LookAt(closestTarget.transform);

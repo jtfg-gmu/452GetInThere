@@ -47,8 +47,8 @@ public class AttackAOE : AttackType
     public GameObject waveDisplay;
     protected override void Start()
     {
-        attackRange = 2f;
-        dmg = 20.0f;
+        attackRange = 1f; // half of what we want so that we get closer to do AOE damage
+        dmg = 4.0f;
         reloadTime = 3f;
         attackTime = 0.5f;
         base.Start();
@@ -56,7 +56,7 @@ public class AttackAOE : AttackType
     protected override void Attack()
     {
         waveDisplay.SetActive(true);
-        Collider[] collides = Physics.OverlapSphere(transform.position, 2f);
+        Collider[] collides = Physics.OverlapSphere(transform.position, 2 * attackRange);
         lastAttacked = collides;
         foreach (Collider c in collides)
         {
